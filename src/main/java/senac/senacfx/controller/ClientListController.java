@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class ClientListController implements Initializable, DataChangeListener {
+public abstract class ClientListController implements Initializable, DataChangeListener {
     //ao inves de implementar um service = new DepartmentService(), ficaria acoplamento forte
     //e seria obrigado a instanciar a classe
     private DepartmentService service;

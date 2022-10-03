@@ -13,10 +13,11 @@ import senac.senacfx.gui.util.Alerts;
 import senac.senacfx.gui.util.Constraints;
 import senac.senacfx.gui.util.Utils;
 import senac.senacfx.model.entities.Department;
-import senac.senacfx.model.entities.Seller;
+
+import senac.senacfx.model.entities.Fabric;
 import senac.senacfx.model.exceptions.ValidationException;
 import senac.senacfx.model.services.DepartmentService;
-import senac.senacfx.model.services.SellerService;
+import senac.senacfx.model.services.FabricService;
 
 import java.net.URL;
 import java.time.Instant;
@@ -26,9 +27,9 @@ import java.util.*;
 
 public class FabricFormController implements Initializable {
 
-    private Seller entity;
 
-    private SellerService service;
+
+    private FabricService service;
 
     private DepartmentService departmentService;
 
@@ -72,11 +73,11 @@ public class FabricFormController implements Initializable {
     private ObservableList<Department> obsList;
 
     //Contolador agora tem uma instancia do departamento
-    public void setSeller(Seller entity){
-        this.entity = entity;
-    }
+//    public void setFabric(Fabric entity){
+//        this.entity = entity;
+//    }
 
-    public void setServices(SellerService service, DepartmentService departmentService){
+    public void setServices(FabricService service, DepartmentService departmentService){
         this.service = service;
         this.departmentService = departmentService;
     }
@@ -85,27 +86,27 @@ public class FabricFormController implements Initializable {
         dataChangeListeners.add(listener);
     }
 
-    @FXML
-    public void onBtSaveAction(ActionEvent event) {
-        //validacao manual pois nao esta sendo usado framework para injetar dependencia
-        if (entity == null){
-            throw new IllegalStateException("Entidade nula");
-        }
-        if (service == null){
-            throw new IllegalStateException("Servico nulo");
-        }
-
-        try {
-            entity = getFormData();
-            service.saveOrUpdate(entity);
-            notifyDataChangeListeners();
-            Utils.currentStage(event).close();
-        } catch (DbException e){
-            Alerts.showAlert("Erro ao salvar objeto", null, e.getMessage(), Alert.AlertType.ERROR);
-        } catch (ValidationException e){
-            setErrorMessages(e.getErrors());
-        }
-    }
+//    @FXML
+//    public void onBtSaveAction(ActionEvent event) {
+//        //validacao manual pois nao esta sendo usado framework para injetar dependencia
+//        if (entity == null){
+//            throw new IllegalStateException("Entidade nula");
+//        }
+//        if (service == null){
+//            throw new IllegalStateException("Servico nulo");
+//        }
+//
+//        try {
+//            entity = getFormData();
+//            service.saveOrUpdate(entity);
+//            notifyDataChangeListeners();
+//            Utils.currentStage(event).close();
+//        } catch (DbException e){
+//            Alerts.showAlert("Erro ao salvar objeto", null, e.getMessage(), Alert.AlertType.ERROR);
+//        } catch (ValidationException e){
+//            setErrorMessages(e.getErrors());
+//        }
+//    }
 
     private void notifyDataChangeListeners() {
         for (DataChangeListener listener : dataChangeListeners){
@@ -113,8 +114,8 @@ public class FabricFormController implements Initializable {
         }
     }
 
-    private Seller getFormData() {
-        Seller obj = new Seller();
+    private Fabric getFormData() {
+        Fabric obj = new Fabric();
 
         ValidationException exception = new ValidationException("Erro na validacao");
 
@@ -173,31 +174,31 @@ public class FabricFormController implements Initializable {
 
     }
 
-    public void updateFormData(){
-
-        if (entity == null){
-            throw new IllegalStateException("Entidade nula");
-        }
-
-        txtId.setText(String.valueOf(entity.getId()));
-        txtName.setText(entity.getName());
-        txtEmail.setText(entity.getEmail());
-
-        Locale.setDefault(Locale.US);
-
-        if (entity.getBirthDate() != null) {
-            dpBirthDate.setValue(LocalDate.ofInstant(entity.getBirthDate().toInstant(), ZoneId.systemDefault()));
-        }
-
-        txtBaseSalary.setText(String.format("%.2f", entity.getBaseSalary()));
-
-        if (entity.getDepartment() == null) {
-            comboBoxDepartment.getSelectionModel().selectFirst();
-        } else {
-            comboBoxDepartment.setValue(entity.getDepartment());
-        }
-
-    }
+//    public void updateFormData(){
+//
+//        if (entity == null){
+//            throw new IllegalStateException("Entidade nula");
+//        }
+//
+//        txtId.setText(String.valueOf(entity.getId()));
+//        txtName.setText(entity.getName());
+//        txtEmail.setText(entity.getEmail());
+//
+//        Locale.setDefault(Locale.US);
+//
+//        if (entity.getBirthDate() != null) {
+//            dpBirthDate.setValue(LocalDate.ofInstant(entity.getBirthDate().toInstant(), ZoneId.systemDefault()));
+//        }
+//
+//        txtBaseSalary.setText(String.format("%.2f", entity.getBaseSalary()));
+//
+//        if (entity.getDepartment() == null) {
+//            comboBoxDepartment.getSelectionModel().selectFirst();
+//        } else {
+//            comboBoxDepartment.setValue(entity.getDepartment());
+//        }
+//
+//    }
 
     public void loadAssociatedObjects(){
 

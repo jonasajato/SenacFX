@@ -18,9 +18,8 @@ import senac.senacfx.db.DbException;
 import senac.senacfx.gui.listeners.DataChangeListener;
 import senac.senacfx.gui.util.Alerts;
 import senac.senacfx.gui.util.Utils;
-import senac.senacfx.model.entities.Seller;
-import senac.senacfx.model.services.DepartmentService;
-import senac.senacfx.model.services.SellerService;
+import senac.senacfx.model.entities.Fabric;
+import senac.senacfx.model.services.FabricService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,52 +28,52 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class FabricListController implements Initializable, DataChangeListener {
+public abstract class FabricListController implements Initializable, DataChangeListener {
     //ao inves de implementar um service = new SellerService(), ficaria acoplamento forte
     //e seria obrigado a instanciar a classe
-    private SellerService service;
+    private FabricService service;
 
     @FXML
-    private TableView<Seller> tableViewSeller;
+    private TableView<Fabric> tableViewFabric;
 
     @FXML
-    private TableColumn<Seller, Integer> tableColumnId;
+    private TableColumn<Fabric, Integer> tableColumnId;
 
     @FXML
-    private TableColumn<Seller, String> tableColumnName;
+    private TableColumn<Fabric, String> tableColumnName;
 
     @FXML
-    private TableColumn<Seller, String> tableColumnEmail;
+    private TableColumn<Fabric, String> tableColumnEmail;
 
     @FXML
-    private TableColumn<Seller, Date> tableColumnBirthDate;
+    private TableColumn<Fabric, Date> tableColumnBirthDate;
 
     @FXML
-    private TableColumn<Seller, Double> tableColumnBaseSalary;
+    private TableColumn<Fabric, Double> tableColumnBaseSalary;
 
     @FXML
-    private TableColumn<Seller, Seller> tableColumnEDIT;
+    private TableColumn<Fabric, Fabric> tableColumnEDIT;
 
     @FXML
-    private TableColumn<Seller, Seller> tableColumnREMOVE;
+    private TableColumn<Fabric, Fabric> tableColumnREMOVE;
 
     @FXML
     private Button btNew;
 
-    private ObservableList<Seller> obsList;
+    private ObservableList<Fabric> obsList;
 
     @FXML
     public void onBtNewAction(ActionEvent event){
         Stage parentStage = Utils.currentStage(event);
-        Seller obj = new Seller();
+        Fabric obj = new Fabric();
         createDialogForm(obj, "/gui/FabricForm.fxml", parentStage);
     }
 
     //feito isso usando um set, para injetar dependencia, boa pratica
     //injecao de dependendencia manual, sem framework pra isso
-    public void setSellerService(SellerService service){
-        this.service = service;
-    }
+//    public void setFabricService(FabricService service){
+//        this.service = service;
+//    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -93,7 +92,7 @@ public class FabricListController implements Initializable, DataChangeListener {
 
 
         Stage stage = (Stage) Main.getMainScene().getWindow();
-        tableViewSeller.prefHeightProperty().bind(stage.heightProperty());
+        tableViewFabric.prefHeightProperty().bind(stage.heightProperty());
 
     }
 
@@ -101,24 +100,24 @@ public class FabricListController implements Initializable, DataChangeListener {
         if (service == null){
             throw new IllegalStateException("Service is null!");
         }
-        List<Seller> list = service.findAll();
+        List<Fabric> list = service.findAll();
         obsList = FXCollections.observableArrayList(list);
-        tableViewSeller.setItems(obsList);
+        tableViewFabric.setItems(obsList);
         initEditButtons();
         initRemoveButtons();
     }
 
-    private void createDialogForm(Seller obj, String absoluteName, Stage parentStage){
+    private void createDialogForm(Fabric obj, String absoluteName, Stage parentStage){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             Pane pane = loader.load();
 
             FabricFormController controller = loader.getController();
-            controller.setSeller(obj);
-            controller.setServices(new SellerService(), new DepartmentService());
+//            controller.setFabric(obj);
+//            controller.setServices(new FabricService(), new DepartmentService());
             controller.loadAssociatedObjects();
             controller.subscribeDataChangeListener(this);
-            controller.updateFormData();
+//            controller.updateFormData();
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Enter seller data");
@@ -141,10 +140,10 @@ public class FabricListController implements Initializable, DataChangeListener {
 
     private void initEditButtons() {
         tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-        tableColumnEDIT.setCellFactory(param -> new TableCell<Seller, Seller>() {
+        tableColumnEDIT.setCellFactory(param -> new TableCell<Fabric, Fabric>() {
             private final Button button = new Button("Editar");
             @Override
-            protected void updateItem(Seller obj, boolean empty) {
+            protected void updateItem(Fabric obj, boolean empty) {
                 super.updateItem(obj, empty);
                 if (obj == null) {
                     setGraphic(null);
@@ -160,11 +159,11 @@ public class FabricListController implements Initializable, DataChangeListener {
 
     private void initRemoveButtons() {
         tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-        tableColumnREMOVE.setCellFactory(param -> new TableCell<Seller, Seller>() {
+        tableColumnREMOVE.setCellFactory(param -> new TableCell<Fabric, Fabric>() {
             private final Button button = new Button("Remover");
 
             @Override
-            protected void updateItem(Seller obj, boolean empty) {
+            protected void updateItem(Fabric obj, boolean empty) {
                 super.updateItem(obj, empty);
                 if (obj == null) {
                     setGraphic(null);
@@ -176,7 +175,7 @@ public class FabricListController implements Initializable, DataChangeListener {
         });
     }
 
-    private void removeEntity(Seller obj) {
+    private void removeEntity(Fabric obj) {
         Optional<ButtonType> result = Alerts.showConfirmation("Confirmation", "Confirma que quer deletar?");
 
         if (result.get() == ButtonType.OK){
@@ -192,4 +191,7 @@ public class FabricListController implements Initializable, DataChangeListener {
         }
     }
 
+//    public void setFabricService(FabricService fabricService) {
+//        this.fabricService = fabricService;
+//    }
 }

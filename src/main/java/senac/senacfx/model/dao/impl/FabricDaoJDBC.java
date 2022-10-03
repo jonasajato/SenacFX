@@ -2,9 +2,10 @@ package senac.senacfx.model.dao.impl;
 
 import senac.senacfx.db.DB;
 import senac.senacfx.db.DbException;
-import senac.senacfx.model.dao.SellerDao;
+import senac.senacfx.model.dao.FabricDao;
 import senac.senacfx.model.entities.Department;
-import senac.senacfx.model.entities.Seller;
+import senac.senacfx.model.entities.Fabric;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,15 +13,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SellerDaoJDBC implements SellerDao {
+public class FabricDaoJDBC implements FabricDao {
     private Connection conn;
 
-    public SellerDaoJDBC(Connection conn) {
+    public FabricDaoJDBC(Connection conn) {
         this.conn = conn;
     }
 
     @Override
-    public void insert(Seller obj) {
+    public void insert(Fabric obj) {
         PreparedStatement st = null;
         try{
             st = conn.prepareStatement(
@@ -56,7 +57,7 @@ public class SellerDaoJDBC implements SellerDao {
     }
 
     @Override
-    public void update(Seller obj) {
+    public void update(Fabric obj) {
         PreparedStatement st = null;
         try{
             st = conn.prepareStatement(
@@ -102,7 +103,7 @@ public class SellerDaoJDBC implements SellerDao {
     }
 
     @Override
-    public Seller findById(Integer id) {
+    public Fabric findById(Integer id) {
         PreparedStatement st = null;
         ResultSet rs = null;
         try{
@@ -116,7 +117,7 @@ public class SellerDaoJDBC implements SellerDao {
             rs = st.executeQuery();
             if (rs.next()){
                 Department dep = instantiateDepartment(rs);
-                Seller obj = instantiateSeller(rs, dep);
+                Fabric obj = instantiateFabric(rs, dep);
                 return obj;
 
             }
@@ -136,8 +137,8 @@ public class SellerDaoJDBC implements SellerDao {
         return dep;
     }
 
-    private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException{
-        Seller obj = new Seller();
+    private Fabric instantiateFabric(ResultSet rs, Department dep) throws SQLException{
+        Fabric obj = new Fabric();
         obj.setId(rs.getInt("Id"));
         obj.setName(rs.getString("Name"));
         obj.setEmail(rs.getString("Email"));
@@ -147,7 +148,7 @@ public class SellerDaoJDBC implements SellerDao {
         return obj;
     }
     @Override
-    public List<Seller> findAll() {
+    public List<Fabric> findAll() {
         PreparedStatement st = null;
         ResultSet rs = null;
         try{
@@ -159,7 +160,7 @@ public class SellerDaoJDBC implements SellerDao {
 
             rs = st.executeQuery();
 
-            List<Seller> list = new ArrayList<>();
+            List<Fabric> list = new ArrayList<>();
             Map<Integer, Department> map = new HashMap<>();
 
             while (rs.next()){
@@ -171,7 +172,7 @@ public class SellerDaoJDBC implements SellerDao {
                     map.put(rs.getInt("DepartmentId"), dep);
                 }
 
-                Seller obj = instantiateSeller(rs, dep);
+                Fabric obj = instantiateFabric(rs, dep);
                 list.add(obj);
             }
             return list;
@@ -184,7 +185,7 @@ public class SellerDaoJDBC implements SellerDao {
     }
 
     @Override
-    public List<Seller> findByDepartment(Department department) {
+    public List<Fabric> findByDepartment(Department department) {
         PreparedStatement st = null;
         ResultSet rs = null;
         try{
@@ -199,7 +200,7 @@ public class SellerDaoJDBC implements SellerDao {
 
             rs = st.executeQuery();
 
-            List<Seller> list = new ArrayList<>();
+            List<Fabric> list = new ArrayList<>();
             Map<Integer, Department> map = new HashMap<>();
 
             while (rs.next()){
@@ -211,7 +212,7 @@ public class SellerDaoJDBC implements SellerDao {
                     map.put(rs.getInt("DepartmentId"), dep);
                 }
 
-                Seller obj = instantiateSeller(rs, dep);
+                Fabric obj = instantiateFabric(rs, dep);
                 list.add(obj);
             }
             return list;

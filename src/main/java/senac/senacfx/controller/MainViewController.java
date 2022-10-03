@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import senac.senacfx.application.Main;
 import senac.senacfx.gui.util.Alerts;
 import senac.senacfx.model.services.DepartmentService;
-import senac.senacfx.model.services.SellerService;
+import senac.senacfx.model.services.FabricService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -43,15 +43,15 @@ public class MainViewController implements Initializable {
     @FXML
     public void onMenuItemFabricaAction(){
         loadView("/gui/FabricList.fxml", (FabricListController controller) -> {
-            controller.setSellerService(new SellerService());
+            controller.setFabricService(new FabricService());
             controller.updateTableView();
         });
     }
 
     @FXML
     public void onMenuItemDistribAction(){
-        loadView("/gui/FabricList.fxml", (FabricListController controller) -> {
-            controller.setSellerService(new SellerService());
+        loadView("/gui/DistribList.fxml", (FabricListController controller) -> {
+            controller.setFabricService(new FabricService());
             controller.updateTableView();
         });
     }
@@ -71,7 +71,6 @@ public class MainViewController implements Initializable {
 
     @FXML
     public void onMenuItemClientAction(){
-
         loadView("/gui/ClientList.fxml", x -> {});
     }
 
@@ -106,6 +105,7 @@ public class MainViewController implements Initializable {
 
         }catch (IOException e){
             Alerts.showAlert("IO EXCEPTION", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
+            e.printStackTrace();
         }
     }
 }

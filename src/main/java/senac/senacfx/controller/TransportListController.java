@@ -18,9 +18,9 @@ import senac.senacfx.db.DbException;
 import senac.senacfx.gui.listeners.DataChangeListener;
 import senac.senacfx.gui.util.Alerts;
 import senac.senacfx.gui.util.Utils;
-import senac.senacfx.model.entities.Seller;
+import senac.senacfx.model.entities.Fabric;
 import senac.senacfx.model.services.DepartmentService;
-import senac.senacfx.model.services.SellerService;
+import senac.senacfx.model.services.FabricService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,47 +32,47 @@ import java.util.ResourceBundle;
 public class TransportListController implements Initializable, DataChangeListener {
     //ao inves de implementar um service = new SellerService(), ficaria acoplamento forte
     //e seria obrigado a instanciar a classe
-    private SellerService service;
+    private FabricService service;
 
     @FXML
-    private TableView<Seller> tableViewSeller;
+    private TableView<Fabric> tableViewFabric;
 
     @FXML
-    private TableColumn<Seller, Integer> tableColumnId;
+    private TableColumn<Fabric, Integer> tableColumnId;
 
     @FXML
-    private TableColumn<Seller, String> tableColumnName;
+    private TableColumn<Fabric, String> tableColumnName;
 
     @FXML
-    private TableColumn<Seller, String> tableColumnEmail;
+    private TableColumn<Fabric, String> tableColumnEmail;
 
     @FXML
-    private TableColumn<Seller, Date> tableColumnBirthDate;
+    private TableColumn<Fabric, Date> tableColumnBirthDate;
 
     @FXML
-    private TableColumn<Seller, Double> tableColumnBaseSalary;
+    private TableColumn<Fabric, Double> tableColumnBaseSalary;
 
     @FXML
-    private TableColumn<Seller, Seller> tableColumnEDIT;
+    private TableColumn<Fabric, Fabric> tableColumnEDIT;
 
     @FXML
-    private TableColumn<Seller, Seller> tableColumnREMOVE;
+    private TableColumn<Fabric, Fabric> tableColumnREMOVE;
 
     @FXML
     private Button btNew;
 
-    private ObservableList<Seller> obsList;
+    private ObservableList<Fabric> obsList;
 
-    @FXML
-    public void onBtNewAction(ActionEvent event){
-        Stage parentStage = Utils.currentStage(event);
-        Seller obj = new Seller();
-        createDialogForm(obj, "/gui/FabricForm.fxml", parentStage);
-    }
+//    @FXML
+//    public void onBtNewAction(ActionEvent event){
+//        Stage parentStage = Utils.currentStage(event);
+//        Fabric obj = new Fabric();
+//        createDialogForm(obj, "/gui/FabricForm.fxml", parentStage);
+//    }
 
     //feito isso usando um set, para injetar dependencia, boa pratica
     //injecao de dependendencia manual, sem framework pra isso
-    public void setSellerService(SellerService service){
+    public void setFabricService(FabricService service){
         this.service = service;
     }
 
@@ -93,105 +93,112 @@ public class TransportListController implements Initializable, DataChangeListene
 
 
         Stage stage = (Stage) Main.getMainScene().getWindow();
-        tableViewSeller.prefHeightProperty().bind(stage.heightProperty());
+        tableViewFabric.prefHeightProperty().bind(stage.heightProperty());
 
     }
 
-    public void updateTableView(){
-        if (service == null){
-            throw new IllegalStateException("Service is null!");
-        }
-        List<Seller> list = service.findAll();
-        obsList = FXCollections.observableArrayList(list);
-        tableViewSeller.setItems(obsList);
-        initEditButtons();
-        initRemoveButtons();
-    }
+//    public void updateTableView(){
+//        if (service == null){
+//            throw new IllegalStateException("Service is null!");
+//        }
+//        List<Fabric> list = service.findAll();
+//        obsList = FXCollections.observableArrayList(list);
+//        tableViewFabric.setItems(obsList);
+//        initEditButtons();
+//        initRemoveButtons();
+//    }
 
-    private void createDialogForm(Seller obj, String absoluteName, Stage parentStage){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-            Pane pane = loader.load();
+//    private void createDialogForm(Fabric obj, String absoluteName, Stage parentStage){
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+//            Pane pane = loader.load();
+//
+//            FabricFormController controller = loader.getController();
+//            controller.setFabric(obj);
+//            controller.setServices(new FabricService(), new DepartmentService());
+//            controller.loadAssociatedObjects();
+//            controller.subscribeDataChangeListener(this);
+//            controller.updateFormData();
+//
+//            Stage dialogStage = new Stage();
+//            dialogStage.setTitle("Enter seller data");
+//            dialogStage.setScene(new Scene(pane));
+//            dialogStage.setResizable(false);
+//            dialogStage.initOwner(parentStage);
+//            dialogStage.initModality(Modality.WINDOW_MODAL);
+//            dialogStage.showAndWait();
+//
+//        } catch (IOException e){
+//            e.printStackTrace();
+//            Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
+//        }
+//    }
 
-            FabricFormController controller = loader.getController();
-            controller.setSeller(obj);
-            controller.setServices(new SellerService(), new DepartmentService());
-            controller.loadAssociatedObjects();
-            controller.subscribeDataChangeListener(this);
-            controller.updateFormData();
-
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Enter seller data");
-            dialogStage.setScene(new Scene(pane));
-            dialogStage.setResizable(false);
-            dialogStage.initOwner(parentStage);
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.showAndWait();
-
-        } catch (IOException e){
-            e.printStackTrace();
-            Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-    @Override
-    public void onDataChanged() {
-        updateTableView();
-    }
+//    @Override
+//    public void onDataChanged() {
+//        updateTableView();
+//    }
 
     private void initEditButtons() {
         tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-        tableColumnEDIT.setCellFactory(param -> new TableCell<Seller, Seller>() {
-            private final Button button = new Button("Editar");
-            @Override
-            protected void updateItem(Seller obj, boolean empty) {
-                super.updateItem(obj, empty);
-                if (obj == null) {
-                    setGraphic(null);
-                    return;
+        tableColumnEDIT.setCellFactory(param -> {
+            return new TableCell<Fabric, Fabric>() {
+                private final Button button = new Button("Editar");
+                //            @Override
+                //            protected void updateItem(Fabric obj, boolean empty) {
+                //                super.updateItem(obj, empty);
+                //                if (obj == null) {
+                //                    setGraphic(null);
+                //                    return;
+                //                }
+                //                setGraphic(button);
+                //                button.setOnAction(
+                //                        event -> createDialogForm(
+                //                                obj, "/gui/FabricForm.fxml",Utils.currentStage(event)));
+                            };
+                        });
+                    }
+
+                private void initRemoveButtons() {
+                    tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+                    tableColumnREMOVE.setCellFactory(param -> new TableCell<Fabric, Fabric>() {
+                        private final Button button = new Button("Remover");
+
+                        @Override
+                        protected void updateItem(Fabric obj, boolean empty) {
+                            super.updateItem(obj, empty);
+                            if (obj == null) {
+                                setGraphic(null);
+                                return;
+                            }
+                            setGraphic(button);
+                            button.setOnAction(event -> removeEntity(obj));
+                        }
+                    });
                 }
-                setGraphic(button);
-                button.setOnAction(
-                        event -> createDialogForm(
-                                obj, "/gui/FabricForm.fxml",Utils.currentStage(event)));
-            }
-        });
-    }
 
-    private void initRemoveButtons() {
-        tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-        tableColumnREMOVE.setCellFactory(param -> new TableCell<Seller, Seller>() {
-            private final Button button = new Button("Remover");
+                private void removeEntity(Fabric obj) {
+                    Optional<ButtonType> result = Alerts.showConfirmation("Confirmation", "Confirma que quer deletar?");
 
-            @Override
-            protected void updateItem(Seller obj, boolean empty) {
-                super.updateItem(obj, empty);
-                if (obj == null) {
-                    setGraphic(null);
-                    return;
+                    if (result.get() == ButtonType.OK) {
+                        if (service == null) {
+                            throw new IllegalStateException("Service estava null");
+                        }
+                        try {
+                            service.remove(obj);
+                            //                updateTableView();
+                        } catch (DbException e) {
+                            Alerts.showAlert("Error removing object", null, e.getMessage(), Alert.AlertType.ERROR);
+                        }
+                    }
                 }
-                setGraphic(button);
-                button.setOnAction(event -> removeEntity(obj));
-            }
-        });
-    }
 
-    private void removeEntity(Seller obj) {
-        Optional<ButtonType> result = Alerts.showConfirmation("Confirmation", "Confirma que quer deletar?");
+                public void setDepartmentService(TransportFormController transportFormController) {
+                }
 
-        if (result.get() == ButtonType.OK){
-            if (service == null){
-                throw new IllegalStateException("Service estava null");
-            }
-            try {
-                service.remove(obj);
-                updateTableView();
-            } catch (DbException e){
-                Alerts.showAlert("Error removing object", null, e.getMessage(), Alert.AlertType.ERROR);
-            }
-        }
-    }
 
-    public void setDepartmentService(TransportFormController transportFormController) {
+    @Override
+    public void onDataChanged() {
+
     }
 }
