@@ -23,23 +23,42 @@ import java.util.function.Consumer;
 public class MainViewController implements Initializable {
 
     @FXML
-    private MenuItem menuItemSeller;
+    private MenuItem menuItemFabrica;
     @FXML
-    private MenuItem menuItemDepartment;
+    private MenuItem menuItemTransport;
+
+    @FXML
+    private MenuItem menuItemDistrib;
+
     @FXML
     private MenuItem menuItemAbout;
 
     @FXML
-    public void onMenuItemSellerAction(){
-        loadView("/gui/SellerList.fxml", (SellerListController controller) -> {
+    private MenuItem menuItemClient;
+
+
+
+
+
+    @FXML
+    public void onMenuItemFabricaAction(){
+        loadView("/gui/FabricList.fxml", (FabricListController controller) -> {
             controller.setSellerService(new SellerService());
             controller.updateTableView();
         });
     }
 
     @FXML
-    public void onMenuItemDepartmentAction(){
-        loadView("/gui/DepartmentList.fxml", (DepartmentListController controller) -> {
+    public void onMenuItemDistribAction(){
+        loadView("/gui/FabricList.fxml", (FabricListController controller) -> {
+            controller.setSellerService(new SellerService());
+            controller.updateTableView();
+        });
+    }
+
+    @FXML
+    public void onMenuItemTransportAction(){
+        loadView("/gui/TransportList.fxml", (ClientListController controller) -> {
             controller.setDepartmentService(new DepartmentService());
             controller.updateTableView();
         });
@@ -49,6 +68,20 @@ public class MainViewController implements Initializable {
     public void onMenuItemAboutAction(){
         loadView("/gui/About.fxml", x -> {});
     }
+
+    @FXML
+    public void onMenuItemClientAction(){
+
+        loadView("/gui/ClientList.fxml", x -> {});
+    }
+
+    @FXML
+    public void onBtSaveAction(){
+
+        loadView("/gui/ClientForm.fxml", x -> {});
+    }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

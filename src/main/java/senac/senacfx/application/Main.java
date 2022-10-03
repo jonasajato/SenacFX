@@ -25,7 +25,7 @@ public class Main extends Application {
             
             mainScene = new Scene(scrollPane);
             primaryStage.setScene(mainScene);
-            primaryStage.setTitle("Titulo do seu sistema");
+            primaryStage.setTitle("Sistema de Cadastro");
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();

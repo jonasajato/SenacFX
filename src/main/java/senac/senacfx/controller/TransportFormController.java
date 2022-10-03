@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
-public class SellerFormController implements Initializable {
+public class TransportFormController implements Initializable {
 
     private Seller entity;
 
